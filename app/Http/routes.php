@@ -14,3 +14,15 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('admin', function() {
+    return view('admin_template');
+});
+
+Route::get('test', 'TestController@index');
+
+Route::get('tasks', ['as' => 'tasks', 'uses' => 'TasksController@index']);
+Route::post('tasks/store', ['as' => 'tasks.store', 'uses' => 'TasksController@store']);
+Route::get('tasks/create', ['as' => 'tasks.create', 'uses' => 'TasksController@create']);
+Route::get('tasks/{id}', ['as' => 'tasks', 'uses' => 'TasksController@show'])
+    ->where('id', '[0-9]+');
