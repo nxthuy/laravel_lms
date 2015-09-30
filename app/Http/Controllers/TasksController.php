@@ -65,7 +65,9 @@ class TasksController extends Controller
      */
     public function show($id)
     {
-        dd($id);
+        $task = Task::findOrFail($id);
+
+        return view('tasks.show')->withTask($task);
     }
 
     /**
@@ -76,7 +78,9 @@ class TasksController extends Controller
      */
     public function edit($id)
     {
-        //
+        $task = Task::FindOrFail($id);
+
+        return view('tasks.edit')->withTask($task);
     }
 
     /**
@@ -88,7 +92,20 @@ class TasksController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $task = Task::FindOrFail($id);
+
+        $this->validate($request, [
+            'title' => 'required|min:3',
+            'description' => 'required|min:5'
+        ]);
+
+        $input = $request->all();
+
+        $task->fill($input)->save();
+
+        Session::flash('flash_success_message', 'Task successfully updated');
+
+        return redirect()->back();
     }
 
     /**
@@ -99,6 +116,12 @@ class TasksController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $task = Task::FindOrFail($id);
+
+        $task->delete();
+
+        Session::flash('flash_success_message', 'Task successfully Deleted');
+
+        return redirect()->route('tasks.index');
     }
 }
